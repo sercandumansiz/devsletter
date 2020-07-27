@@ -1,0 +1,31 @@
+
+.Header {
+  overflow: hidden;
+  padding: 20px 10px;
+  border-bottom: 2px;
+  text-align: center;
+}
+
+.Header a {
+  color: black;
+  text-align: center;
+  padding: 12px;
+  text-decoration: none;
+  line-height: 25px;
+}
+
+.Header a.logo {
+  font-size: 48px;
+  font-weight: 700;
+}
+
+/* .Header a.logo::after{
+  content: "✉️";
+} */
+
+
+@media screen and (max-width: 500px) {
+  .Header a {
+    display: block;
+  }
+}
