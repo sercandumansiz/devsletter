@@ -1,0 +1,20 @@
+.Landing {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+
+}
+
+.Card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #FFFF99;
+  padding: 1rem;
+}
+
+@media screen and (max-width: 500px) {
+    .Landing {
+         grid-template-columns: repeat(1, 1fr);
+    }
+}

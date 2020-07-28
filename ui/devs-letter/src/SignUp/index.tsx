@@ -2,23 +2,36 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import useFetch from 'use-http'
 import "./style.css";
+import { useHistory } from "react-router-dom";
 
 type RegistrationForm = {
   email: string;
   password: string;
 };
 
+type AuthResponse = {
+  token: string;
+}
+
 export default function SignUp() {
-  const { register, handleSubmit, watch, errors } = useForm<RegistrationForm>();
+  let history = useHistory();
+  const { register, handleSubmit, errors } = useForm<RegistrationForm>();
   const { post, response } = useFetch('http://localhost:5000/api')
 
-  const onSubmit: SubmitHandler<RegistrationForm> = async data => {
-    await post('/users/register', data)
+  const registerUser = async (data:any) => {
+   await post('/users/register', data)
     if (response.ok) {
-     
-      alert(JSON.stringify(data));
-      console.log(response.json);
+      await post('/users/token', data)
+      if (response.ok) {
+        let auth : AuthResponse = response.data;
+        localStorage.setItem("token", auth.token)
+        history.push('/showcase')
+      }
     }
+  }
+  
+  const onSubmit: SubmitHandler<RegistrationForm> = async data => {
+    await registerUser(data);
   }
 
   return (
