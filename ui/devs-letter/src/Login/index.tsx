@@ -4,7 +4,7 @@ import useFetch from 'use-http'
 import "./style.css";
 import { useHistory, Link } from "react-router-dom";
 
-type RegistrationForm = {
+type LoginForm = {
   email: string;
   password: string;
 };
@@ -13,29 +13,27 @@ type AuthResponse = {
   token: string;
 }
 
-export default function SignUp() {
+export default function Login() {
   let history = useHistory();
-  const { register, handleSubmit, errors } = useForm<RegistrationForm>();
+  const { register, handleSubmit, errors } = useForm<LoginForm>();
   const { post, response } = useFetch('http://localhost:5000/api')
 
-  const registerUser = async (data:any) => {
-   await post('/users/register', data)
-    if (response.ok) {
+  const loginUser = async (data:any) => {
       await post('/users/token', data)
       if (response.ok) {
         let auth : AuthResponse = response.data;
         localStorage.setItem("token", auth.token)
-         window.location.href = "/showcase";
+        // TODO : route
+        window.location.href = "/showcase";
       }
-    }
   }
   
-  const onSubmit: SubmitHandler<RegistrationForm> = async data => {
-    await registerUser(data);
+  const onSubmit: SubmitHandler<LoginForm> = async data => {
+    await loginUser(data);
   }
 
   return (
-    <form className="SignUpForm" onSubmit={handleSubmit(onSubmit)}>
+    <form className="LoginForm" onSubmit={handleSubmit(onSubmit)}>
       
       <div className="FormInput">
             <label>email : </label>
@@ -61,7 +59,7 @@ export default function SignUp() {
     
 
         <input type="submit" />
-        <Link className="Link" to="/login">I have an account</Link>
+        <Link className="Link" to="/join">I don't have an account</Link>
 </div>
     </form>
   );
