@@ -1,0 +1,28 @@
+.InfoLanding {
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(2, 1fr);
+  height: 70vh;
+}
+
+.ObserverCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #BFE7FD;
+  padding: 1rem;
+}
+
+.ProducerCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgb(253, 191, 229);
+  padding: 1rem;
+}
+
+@media screen and (max-width: 500px) {
+    .InfoLanding {
+         grid-template-columns: repeat(1, 1fr);
+    }
+}

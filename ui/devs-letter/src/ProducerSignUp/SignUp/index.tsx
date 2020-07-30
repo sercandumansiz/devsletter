@@ -4,7 +4,7 @@ import useFetch from "use-http"
 import "./style.css"
 import { Link } from "react-router-dom"
 
-type LoginForm = {
+type RegistrationForm = {
   email: string
   password: string
 }
@@ -13,27 +13,29 @@ type AuthResponse = {
   token: string
 }
 
-export default function Login() {
-  const { register, handleSubmit, errors } = useForm<LoginForm>()
+export default function ProducerSignUp() {
+  const { register, handleSubmit, errors } = useForm<RegistrationForm>()
   const { post, response } = useFetch("http://localhost:5000/api")
 
-  const loginUser = async (data: any) => {
-    await post("/users/token", data)
+  const registerUser = async (data: any) => {
+    await post("/users/register", data)
     if (response.ok) {
-      const auth: AuthResponse = response.data
-      localStorage.setItem("token", auth.token)
-      // TODO : route
-      window.location.href = "/"
+      await post("/users/token", data)
+      if (response.ok) {
+        const auth: AuthResponse = response.data
+        localStorage.setItem("token", auth.token)
+        window.location.href = "/showcase"
+      }
     }
   }
 
-  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
-    await loginUser(data)
+  const onSubmit: SubmitHandler<RegistrationForm> = async (data) => {
+    await registerUser(data)
   }
 
   return (
-    <form className="LoginForm" onSubmit={handleSubmit(onSubmit)}>
-      <div className="LoginFormInput">
+    <form className="SignUpForm" onSubmit={handleSubmit(onSubmit)}>
+      <div className="SignUpFormInput">
         <label>email : </label>
         <input
           name="email"
@@ -48,7 +50,7 @@ export default function Login() {
         {errors.email && <p>{errors.email.message} email is required</p>}
       </div>
 
-      <div className="LoginFormInput">
+      <div className="SignUpFormInput">
         <label>password : </label>
         <input
           type="password"
@@ -64,10 +66,10 @@ export default function Login() {
           </p>
         )}
       </div>
-      <div className="LoginFormInput">
-        <input type="submit" value="Login"/>
-        <Link className="LoginLink" to="/join">
-          I don't have an account
+      <div className="SignUpFormInput">
+        <input type="submit" value="Join"/>
+        <Link className="SignUpLink" to="/login">
+          I have an account
         </Link>
       </div>
     </form>

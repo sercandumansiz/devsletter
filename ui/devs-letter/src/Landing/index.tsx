@@ -1,23 +1,13 @@
-import React from "react";
-import "./style.css";
-import { Link } from "react-router-dom";
+import React from "react"
+import WelcomeLanding from "./WelcomeLanding"
+import InfoLanding from "./InfoLanding"
+import "./style.css"
 
 export default function Landing() {
+  const isAuthenticated = localStorage.getItem("token") !== null
   return (
     <div className="Landing">
-      <div className="Card">
-        <h1>Title - Card 1</h1>
-        <p>Medium length description. Let's add a few more words here.</p>
-      </div>
-      <div className="Card">
-        <h1>Title - Card 2</h1>
-        <p>Long Description. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sed est error repellat veritatis.</p>
-      </div>
-      <div className="Card">
-        <h1>Title - Card 3</h1>
-        <p>Short Description.</p>
-        <Link to="/join">Join Us!</Link>
-      </div>
+      { isAuthenticated ? <InfoLanding></InfoLanding> : <WelcomeLanding></WelcomeLanding> }
     </div>
-  );
+  )
 }
