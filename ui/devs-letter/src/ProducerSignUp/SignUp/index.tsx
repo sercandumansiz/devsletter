@@ -2,75 +2,68 @@ import React from "react"
 import { useForm, SubmitHandler } from "react-hook-form"
 import useFetch from "use-http"
 import "./style.css"
-import { Link } from "react-router-dom"
-
-type RegistrationForm = {
-  email: string
-  password: string
-}
-
-type AuthResponse = {
-  token: string
-}
+import { ProducerSignUpRequest } from "../../ApiRequests/ProducerSignUpRequest"
+import { UserResponse } from "../../ApiResponses/UserResponse"
 
 export default function ProducerSignUp() {
-  const { register, handleSubmit, errors } = useForm<RegistrationForm>()
-  const { post, response } = useFetch("http://localhost:5000/api")
 
-  const registerUser = async (data: any) => {
-    await post("/users/register", data)
-    if (response.ok) {
-      await post("/users/token", data)
-      if (response.ok) {
-        const auth: AuthResponse = response.data
-        localStorage.setItem("token", auth.token)
-        window.location.href = "/showcase"
-      }
+  const { register, handleSubmit, errors } = useForm<ProducerSignUpRequest>()
+  const { post, response } = useFetch("http://localhost:5002/api")
+
+  const signUpProducer = async (data: any) => {
+
+    let user = localStorage.getItem("user");
+
+    if (user) {
+      let userResponse = JSON.parse(user) as UserResponse;
+        await post(`/users/${userResponse.id}/producer/become`, data)
+        if (response.ok) {
+              window.location.href = "/showcase";
+        }
     }
   }
 
-  const onSubmit: SubmitHandler<RegistrationForm> = async (data) => {
-    await registerUser(data)
+  const onSubmit: SubmitHandler<ProducerSignUpRequest> = async (data) => {
+    await signUpProducer(data)
   }
 
   return (
-    <form className="SignUpForm" onSubmit={handleSubmit(onSubmit)}>
-      <div className="SignUpFormInput">
-        <label>email : </label>
+    <form className="ProducerSignUpForm" onSubmit={handleSubmit(onSubmit)}>
+      <div className="ProducerSignUpFormInput">
+        <label>username : </label>
         <input
-          name="email"
+          name="username"
           ref={register({
             required: true,
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "invalid email address",
-            },
           })}
         />
-        {errors.email && <p>{errors.email.message} email is required</p>}
+        {errors.username && <p>{errors.username.message} username is required</p>}
       </div>
 
-      <div className="SignUpFormInput">
-        <label>password : </label>
+      <div className="ProducerSignUpFormInput">
+        <label>link : </label>
         <input
-          type="password"
-          name="password"
+          name="referenceLink"
           ref={register({
             required: true,
-            minLength: 6,
           })}
         />
-        {errors.password && (
-          <p>
-            password is required and must contains minimum <b>6</b> characters
-          </p>
-        )}
+        {errors.referenceLink && <p>{errors.referenceLink.message} link is required</p>}
       </div>
-      <div className="SignUpFormInput">
-        <input type="submit" value="Join"/>
-        <Link className="SignUpLink" to="/login">
-          I have an account
-        </Link>
+
+      <div className="ProducerSignUpFormInput">
+        <label>note : </label>
+        <input
+          name="note"
+          ref={register({
+            required: true,
+          })}
+        />
+        {errors.note && <p>{errors.note.message} note is required</p>}
+      </div>
+
+      <div className="ProducerSignUpFormInput">
+        <input type="submit" value="Become a Producer"/>
       </div>
     </form>
   )

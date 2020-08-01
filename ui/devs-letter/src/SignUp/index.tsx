@@ -3,18 +3,11 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import useFetch from "use-http"
 import "./style.css"
 import { Link } from "react-router-dom"
-
-type RegistrationForm = {
-  email: string
-  password: string
-}
-
-type AuthResponse = {
-  token: string
-}
+import { RegisterRequest } from "../ApiRequests/RegisterRequest"
+import { AuthResponse } from "../ApiResponses/AuthResponse"
 
 export default function SignUp() {
-  const { register, handleSubmit, errors } = useForm<RegistrationForm>()
+  const { register, handleSubmit, errors } = useForm<RegisterRequest>()
   const { post, response } = useFetch("http://localhost:5000/api")
 
   const registerUser = async (data: any) => {
@@ -23,13 +16,16 @@ export default function SignUp() {
       await post("/users/token", data)
       if (response.ok) {
         const auth: AuthResponse = response.data
+
         localStorage.setItem("token", auth.token)
-        window.location.href = "/showcase"
+        localStorage.setItem("refreshToken", auth.refreshToken)
+        localStorage.setItem("user", JSON.stringify(auth.user))
+         window.location.href = "/"
       }
     }
   }
 
-  const onSubmit: SubmitHandler<RegistrationForm> = async (data) => {
+  const onSubmit: SubmitHandler<RegisterRequest> = async (data) => {
     await registerUser(data)
   }
 
