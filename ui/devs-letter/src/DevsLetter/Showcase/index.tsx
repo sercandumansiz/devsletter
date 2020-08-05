@@ -1,9 +1,11 @@
 import React from "react"
+import "./style.css"
+import DevsLetterHeader from "../Header"
 
 export default function DevsLetterShowcase() {
   return (
-    <div>
-      <h1>DevsLetterShowcase</h1>
+    <div className="Showcase">
+      <DevsLetterHeader></DevsLetterHeader>
     </div>
   )
 }

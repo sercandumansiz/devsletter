@@ -46,6 +46,7 @@ namespace DevsLetter.API
                 sp.GetRequiredService<IOptions<ApplicationSettings>>().Value);
 
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IDevsLetterService, DevsLetterService>();
             services.AddTransient<JWTMiddleware>();
             services.AddControllers();
 

@@ -1,6 +1,5 @@
 import React from "react"
-
-import "./App.css"
+import './App.sass';
 import Header from "./Header"
 import SignUp from "./SignUp"
 import Landing from "./Landing"
@@ -14,7 +13,6 @@ import useFetch, { Provider } from "use-http"
 import { AuthResponse } from "./ApiResponses/AuthResponse"
 import jwt_decode from "jwt-decode"
 
-
 export default function App() {
   const { get, response } = useFetch("http://localhost:5000/api")
 
@@ -24,6 +22,7 @@ export default function App() {
 		interceptors: {
       request: async ({ options }: { options: any }) => {
         if (isAuthenticated) {
+          console.log('A');
           let token = localStorage.getItem("token")!;
           let decoded = jwt_decode(token) as any;
           let expireDate = new Date(decoded.exp * 1000);
@@ -38,7 +37,6 @@ export default function App() {
                     {
                   const auth: AuthResponse = response.data
                   token = auth.token;
-                  console.log(token);
                       localStorage.setItem("token", auth.token)
                       localStorage.setItem("refreshToken", auth.refreshToken)
                       localStorage.setItem("user", JSON.stringify(auth.user))
@@ -52,8 +50,6 @@ export default function App() {
           
           }
         }
-        console.log('B');
-
         return options;
       },
       response: async ({ response }: { response: any }) => {
@@ -64,9 +60,7 @@ export default function App() {
   return (
     <Provider options={globalOptions}>
       <Router>
-        <div className="App">
             <Header />
-              <main>
                 <NavBar />
                   {isAuthenticated ? (
                     <Switch>
@@ -84,9 +78,7 @@ export default function App() {
                       <Redirect from="/showcase" to="/login" />
                     </Switch>
                     )}
-                </main>
             <Footer />
-          </div>
         </Router>
       </Provider>
   )

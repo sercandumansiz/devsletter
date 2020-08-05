@@ -6,7 +6,7 @@ import "./style.css"
 export default function Landing() {
   const isAuthenticated = localStorage.getItem("token") !== null
   return (
-    <div className="Landing">
+    <div className="section">
       { isAuthenticated ? <InfoLanding></InfoLanding> : <WelcomeLanding></WelcomeLanding> }
     </div>
   )
