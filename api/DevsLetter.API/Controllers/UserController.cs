@@ -66,7 +66,31 @@ namespace DevsLetter.API.Controllers
 
             var result = await _devsLetterService.CreateLetter(model);
 
-            return Ok();
+            if (result.HasError)
+            {
+                return BadRequest(result.ErrorMessage);
+            }
+
+            return Ok(result.Data);
+        }
+
+        [HttpGet("{id}/letter")]
+        [Authorize(Roles = Role.Producer)]
+        public async Task<IActionResult> Letter([FromRoute] Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return BadRequest();
+            }
+
+            var result = await _devsLetterService.GetWeeklyLetter(id);
+
+            if (result.HasError)
+            {
+                return BadRequest(result.ErrorMessage);
+            }
+
+            return Ok(result.Data);
         }
     }
 }
