@@ -1,85 +1,107 @@
-import React from "react"
-import './App.sass';
-import Header from "./Header"
-import SignUp from "./SignUp"
-import Landing from "./Landing"
-import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom"
-import DevsLetterShowcase from "./DevsLetter/Showcase"
-import Login from "./Login"
-import NavBar from "./NavBar"
-import Footer from "./Footer"
-import ProducerSignUp from "./ProducerSignUp/SignUp"
-import useFetch, { Provider } from "use-http"
-import { AuthResponse } from "./ApiResponses/AuthResponse"
-import jwt_decode from "jwt-decode"
+import React from "react";
+import "./App.sass";
+import Header from "./Header";
+import SignUp from "./SignUp";
+import Landing from "./Landing";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+import DevsLetterShowcase from "./DevsLetter/Showcase";
+import Login from "./Login";
+import NavBar from "./NavBar";
+import Footer from "./Footer";
+import ProducerSignUp from "./ProducerSignUp/SignUp";
+import { AuthResponse } from "./ApiResponses/AuthResponse";
+import jwt_decode from "jwt-decode";
+import { Provider } from "use-http";
 
 export default function App() {
-  const { get, response } = useFetch("http://localhost:5000/api")
+  let token = localStorage.getItem("token");
+  let refreshToken = localStorage.getItem("refreshToken");
 
-  const isAuthenticated = localStorage.getItem("token") !== null
+  const isAuthenticated = token !== null;
 
   const globalOptions = {
-		interceptors: {
+    interceptors: {
       request: async ({ options }: { options: any }) => {
         if (isAuthenticated) {
-          console.log('A');
-          let token = localStorage.getItem("token")!;
-          let decoded = jwt_decode(token) as any;
+          let decoded = jwt_decode(token as string) as any;
           let expireDate = new Date(decoded.exp * 1000);
           let now = new Date();
-          
+
           if (expireDate < now) {
-            const hasRefreshToken = localStorage.getItem("refreshToken") !== null
+            const hasRefreshToken = refreshToken !== null;
+
             if (hasRefreshToken) {
-                let refreshToken = localStorage.getItem("refreshToken");
-                await get(`/users/token/${refreshToken}/refresh`)
-                if (response.ok)
-                    {
-                  const auth: AuthResponse = response.data
+              await fetch(
+                `http://localhost:5000/api/users/token/${refreshToken}/refresh`
+              )
+                .then((response) => response.json())
+                .then((result) => {
+                  const auth: AuthResponse = result as AuthResponse;
                   token = auth.token;
-                      localStorage.setItem("token", auth.token)
-                      localStorage.setItem("refreshToken", auth.refreshToken)
-                      localStorage.setItem("user", JSON.stringify(auth.user))
-                      options.headers = {
-                      Authorization: `Bearer ${token}`,
-                      Accept: "application/json, text/plain",
-                      "Content-Type": "application/json"
-                      }
-                    } 
+                  localStorage.setItem("token", auth.token);
+                  localStorage.setItem("refreshToken", auth.refreshToken);
+                  localStorage.setItem("user", JSON.stringify(auth.user));
+                })
+                .catch((err) => console.log(err));
             }
-          
           }
+          options.headers = {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json, text/plain",
+            "Content-Type": "application/json",
+          };
+          return options;
         }
+
+        options.headers = {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json, text/plain",
+          "Content-Type": "application/json",
+        };
         return options;
       },
       response: async ({ response }: { response: any }) => {
-        return response 
-      }
-    }
-	}
+        return response;
+      },
+    },
+  };
   return (
     <Provider options={globalOptions}>
       <Router>
-            <Header />
-                <NavBar />
-                  {isAuthenticated ? (
-                    <Switch>
-                      <Route path="/" exact={true} component={Landing} />
-                      <Route path="/showcase" exact={true} component={DevsLetterShowcase} />
-                      <Redirect from="/join" to="/showcase" />
-                      <Redirect from="/login" to="/showcase" />
-                      <Route path="/become-a-producer" exact={true} component={ProducerSignUp} />
-                    </Switch>
-                  ) : (
-                    <Switch>
-                      <Route path="/" exact={true} component={Landing} />
-                      <Route path="/join" exact={true} component={SignUp} />
-                      <Route from="/login" exact={true} component={Login} />
-                      <Redirect from="/showcase" to="/login" />
-                    </Switch>
-                    )}
-            <Footer />
-        </Router>
-      </Provider>
-  )
+        <Header />
+        <NavBar />
+        {isAuthenticated ? (
+          <Switch>
+            <Route path="/" exact={true} component={Landing} />
+            <Route
+              path="/showcase"
+              exact={true}
+              component={DevsLetterShowcase}
+            />
+            <Redirect from="/join" to="/showcase" />
+            <Redirect from="/login" to="/showcase" />
+            <Route
+              path="/become-a-producer"
+              exact={true}
+              component={ProducerSignUp}
+            />
+          </Switch>
+        ) : (
+          <Switch>
+            <Route path="/" exact={true} component={Landing} />
+            <Route path="/join" exact={true} component={SignUp} />
+            <Route from="/login" exact={true} component={Login} />
+            <Redirect from="/showcase" to="/login" />
+            <Redirect from="/become-a-producer" to="/login" />
+          </Switch>
+        )}
+        <Footer />
+      </Router>
+    </Provider>
+  );
 }

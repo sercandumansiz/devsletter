@@ -31,9 +31,10 @@ export default function SignUp() {
 
   return (
     <div className="container">
-      <div className="columns">
-        <div className="column is-4 is-offset-4">
+      <div className="columns is-centered">
+        <div className="column is-5">
           <div className="box">
+            <h1 className="has-text-centered title">Welcome!</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="field">
                 <div className="control">
