@@ -4,6 +4,7 @@ import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import useFetch from "use-http";
 import { UserResponse } from "../../ApiResponses/UserResponse";
 import { LetterResponse } from "../../ApiResponses/LetterResponse";
+import { API } from "../../Constants/API";
 
 export default function DevsLetterProducerHeader() {
   const {
@@ -27,7 +28,7 @@ export default function DevsLetterProducerHeader() {
   let [hasLetter, setHasLetter] = useState(false);
   let [letter, setLetter] = useState<LetterResponse>();
 
-  const { get, post, put, response } = useFetch("http://localhost:5002/api");
+  const { get, post, put, response } = useFetch(`${API.CORE}/api`);
 
   let user = localStorage.getItem("user")!;
   let userResponse = JSON.parse(user) as UserResponse;

@@ -5,10 +5,11 @@ import "./style.css";
 import { Link } from "react-router-dom";
 import { RegisterRequest } from "../ApiRequests/RegisterRequest";
 import { AuthResponse } from "../ApiResponses/AuthResponse";
+import { API } from "../Constants/API";
 
 export default function SignUp() {
   const { register, handleSubmit, errors } = useForm<RegisterRequest>();
-  const { post, response } = useFetch("http://localhost:5000/api");
+  const { post, response } = useFetch(`${API.AUTH}/api`);
 
   const registerUser = async (data: any) => {
     await post("/users/register", data);

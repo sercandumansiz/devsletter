@@ -5,11 +5,12 @@ import "./style.css";
 import { ProducerSignUpRequest } from "../../ApiRequests/ProducerSignUpRequest";
 import { UserResponse } from "../../ApiResponses/UserResponse";
 import { AuthResponse } from "../../ApiResponses/AuthResponse";
+import { API } from "../../Constants/API";
 
 export default function ProducerSignUp() {
   const { register, handleSubmit, errors } = useForm<ProducerSignUpRequest>();
-  const businessAPI = useFetch("http://localhost:5002/api");
-  const authAPI = useFetch("http://localhost:5000/api");
+  const businessAPI = useFetch(`${API.CORE}/api`);
+  const authAPI = useFetch(`${API.AUTH}/api`);
   const signUpProducer = async (data: any) => {
     let user = localStorage.getItem("user");
 

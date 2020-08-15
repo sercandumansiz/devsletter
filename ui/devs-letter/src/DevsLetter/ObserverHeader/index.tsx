@@ -4,6 +4,7 @@ import { LetterPublishRequest } from "../../ApiRequests/LetterPublishRequest";
 import { useForm, SubmitHandler, useFieldArray } from "react-hook-form";
 import useFetch from "use-http";
 import { UserResponse } from "../../ApiResponses/UserResponse";
+import { API } from "../../Constants/API";
 
 export default function DevsLetterObserverHeader() {
   const { register, control, handleSubmit, errors } = useForm<
@@ -16,7 +17,7 @@ export default function DevsLetterObserverHeader() {
     name: "items",
   });
 
-  const { post, response } = useFetch("http://localhost:5002/api");
+  const { post, response } = useFetch(`${API.CORE}/api`);
 
   let user = localStorage.getItem("user")!;
   let userResponse = JSON.parse(user) as UserResponse;

@@ -17,6 +17,7 @@ import ProducerSignUp from "./ProducerSignUp/SignUp";
 import { AuthResponse } from "./ApiResponses/AuthResponse";
 import jwt_decode from "jwt-decode";
 import { Provider } from "use-http";
+import { API } from "./Constants/API";
 
 export default function App() {
   let token = localStorage.getItem("token");
@@ -36,9 +37,7 @@ export default function App() {
             const hasRefreshToken = refreshToken !== null;
 
             if (hasRefreshToken) {
-              await fetch(
-                `http://localhost:5000/api/users/token/${refreshToken}/refresh`
-              )
+              await fetch(`${API.AUTH}/api/users/token/${refreshToken}/refresh`)
                 .then((response) => response.json())
                 .then((result) => {
                   const auth: AuthResponse = result as AuthResponse;

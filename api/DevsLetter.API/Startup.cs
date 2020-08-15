@@ -77,6 +77,16 @@ namespace DevsLetter.API
                     }
                 };
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ALLOW",
+                    builder => builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -87,10 +97,9 @@ namespace DevsLetter.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(
-                           options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
-                       );
-            // app.UseHttpsRedirection();
+            app.UseCors("ALLOW");
+            app.UseMvc();
+            app.UseHttpsRedirection();
 
             app.UseMiddleware<JWTMiddleware>();
 

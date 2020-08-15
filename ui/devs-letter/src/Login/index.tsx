@@ -5,10 +5,11 @@ import "./style.css";
 import { Link } from "react-router-dom";
 import { AuthResponse } from "../ApiResponses/AuthResponse";
 import { LoginRequest } from "../ApiRequests/LoginRequest";
+import { API } from "../Constants/API";
 
 export default function Login() {
   const { register, handleSubmit, errors } = useForm<LoginRequest>();
-  const { post, response } = useFetch("http://localhost:5000/api");
+  const { post, response } = useFetch(`${API.AUTH}/api`);
 
   const loginUser = async (data: any) => {
     await post("/users/token", data);
