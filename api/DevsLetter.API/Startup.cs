@@ -54,7 +54,6 @@ namespace DevsLetter.API
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IDevsLetterService, DevsLetterService>();
             services.AddTransient<JWTMiddleware>();
-            services.AddControllers();
 
             services.AddAuthentication(a =>
             {
@@ -78,15 +77,8 @@ namespace DevsLetter.API
                 };
             });
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("ALLOW",
-                    builder => builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
-            });
-            services.AddMvc();
+            services.AddControllers();
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -97,8 +89,10 @@ namespace DevsLetter.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("ALLOW");
-            app.UseMvc();
+            app.UseCors(
+                       options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
+                   );
+
             app.UseHttpsRedirection();
 
             app.UseMiddleware<JWTMiddleware>();

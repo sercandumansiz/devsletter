@@ -90,6 +90,11 @@ namespace DevsLetter.API.Controllers
                 return BadRequest(result.ErrorMessage);
             }
 
+            if (result.Data == null)
+            {
+                return NotFound();
+            }
+
             return Ok(result.Data);
         }
     }

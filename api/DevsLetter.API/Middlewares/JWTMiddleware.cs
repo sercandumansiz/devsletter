@@ -13,7 +13,7 @@ namespace DevsLetter.API.Middlewares
         public JWTMiddleware()
         {
             _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("http://localhost:5000/");
+            _httpClient.BaseAddress = new Uri("https://devsletter-auth.herokuapp.com/");
         }
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)

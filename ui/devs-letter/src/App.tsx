@@ -51,17 +51,12 @@ export default function App() {
           }
           options.headers = {
             Authorization: `Bearer ${token}`,
-            Accept: "application/json, text/plain",
+            Accept: "application/json",
             "Content-Type": "application/json",
           };
           return options;
         }
 
-        options.headers = {
-          Authorization: `Bearer ${token}`,
-          Accept: "application/json, text/plain",
-          "Content-Type": "application/json",
-        };
         return options;
       },
       response: async ({ response }: { response: any }) => {

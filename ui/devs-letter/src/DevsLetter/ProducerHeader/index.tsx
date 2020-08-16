@@ -80,7 +80,7 @@ export default function DevsLetterProducerHeader() {
                   <input
                     className="input is-medium"
                     name={`items[${index}].link`}
-                    disabled={!isEditing}
+                    disabled={isEditing}
                     ref={register({
                       required: true,
                     })}

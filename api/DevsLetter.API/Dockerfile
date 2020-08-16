@@ -13,4 +13,4 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 WORKDIR /app
 COPY --from=build-env /app/out .
-CMD ASPNETCORE_URLS=https://*:$PORT dotnet DevsLetter.API.dll
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet DevsLetter.API.dll
