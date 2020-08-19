@@ -1,4 +1,4 @@
-.NavBar {
-    height: 5rem;
-    background-color: blue;
+.navbar-center {
+  flex-grow: 1 !important;
+  justify-content: center !important;
 }

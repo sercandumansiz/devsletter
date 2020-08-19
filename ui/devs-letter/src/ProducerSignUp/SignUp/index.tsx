@@ -11,9 +11,9 @@ export default function ProducerSignUp() {
   const { register, handleSubmit, errors } = useForm<ProducerSignUpRequest>();
   const businessAPI = useFetch(`${API.CORE}/api`);
   const authAPI = useFetch(`${API.AUTH}/api`);
+
   const signUpProducer = async (data: any) => {
     let user = localStorage.getItem("user");
-
     if (user) {
       let userResponse = JSON.parse(user) as UserResponse;
       await businessAPI.post(`/users/${userResponse.id}/producer/become`, data);
@@ -36,47 +36,73 @@ export default function ProducerSignUp() {
   };
 
   return (
-    <form className="ProducerSignUpForm" onSubmit={handleSubmit(onSubmit)}>
-      <div className="ProducerSignUpFormInput">
-        <label>username : </label>
-        <input
-          name="username"
-          ref={register({
-            required: true,
-          })}
-        />
-        {errors.username && (
-          <p>{errors.username.message} username is required</p>
-        )}
+    <div className="container">
+      <div className="columns is-centered">
+        <div className="column is-5">
+          <div className="box">
+            <h1 className="has-text-centered title">Producer</h1>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="field">
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="username"
+                    name="username"
+                    ref={register({
+                      required: true,
+                    })}
+                  />
+                  {errors.username && (
+                    <p className="help is-danger">
+                      {errors.username.message} username is required
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="field">
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="(twitter, linkedin, blog etc.)"
+                    name="referenceLink"
+                    ref={register({
+                      required: true,
+                    })}
+                  />
+                  {errors.referenceLink && (
+                    <p className="help is-danger">
+                      {errors.referenceLink.message} link is required
+                    </p>
+                  )}
+                </div>
+              </div>
+              <div className="field">
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="additional note"
+                    name="note"
+                    ref={register({
+                      required: true,
+                    })}
+                  />
+                  {errors.note && <p>{errors.note.message} note is required</p>}
+                </div>
+              </div>
+              <div className="field">
+                <div className="control">
+                  <button type="submit" className="button is-link is-fullwidth">
+                    Become a Producer
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-
-      <div className="ProducerSignUpFormInput">
-        <label>link : </label>
-        <input
-          name="referenceLink"
-          ref={register({
-            required: true,
-          })}
-        />
-        {errors.referenceLink && (
-          <p>{errors.referenceLink.message} link is required</p>
-        )}
-      </div>
-
-      <div className="ProducerSignUpFormInput">
-        <label>note : </label>
-        <input
-          name="note"
-          ref={register({
-            required: true,
-          })}
-        />
-        {errors.note && <p>{errors.note.message} note is required</p>}
-      </div>
-
-      <div className="ProducerSignUpFormInput">
-        <input type="submit" value="Become a Producer" />
-      </div>
-    </form>
+    </div>
   );
 }

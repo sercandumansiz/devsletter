@@ -90,7 +90,9 @@ export default function SignUp() {
                   </Link>
                 </div>
                 <div className="control">
-                  <button className="button is-link">Join</button>
+                  <button type="submit" className="button is-link">
+                    Join
+                  </button>
                 </div>
               </div>
             </form>

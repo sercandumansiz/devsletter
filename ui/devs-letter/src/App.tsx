@@ -18,13 +18,18 @@ import { AuthResponse } from "./ApiResponses/AuthResponse";
 import jwt_decode from "jwt-decode";
 import { Provider } from "use-http";
 import { API } from "./Constants/API";
+import { Role } from "./Enums/Role";
+import { UserResponse } from "./ApiResponses/UserResponse";
 
 export default function App() {
   let token = localStorage.getItem("token");
   let refreshToken = localStorage.getItem("refreshToken");
-
+  let user = localStorage.getItem("user");
+  let userResponse;
   const isAuthenticated = token !== null;
-
+  if (user) {
+    userResponse = JSON.parse(user) as UserResponse;
+  }
   const globalOptions = {
     interceptors: {
       request: async ({ options }: { options: any }) => {
@@ -84,6 +89,13 @@ export default function App() {
               exact={true}
               component={ProducerSignUp}
             />
+            {user && userResponse && userResponse.type != Role.Producer && (
+              <Route
+                path="/become-a-producer"
+                exact={true}
+                component={ProducerSignUp}
+              />
+            )}
           </Switch>
         ) : (
           <Switch>

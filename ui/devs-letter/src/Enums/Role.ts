@@ -1,4 +1,4 @@
 export enum Role {
-    Observer = "Observer",
-    Producer = "Prodicer"
+  Observer = "Observer",
+  Producer = "Producer",
 }
