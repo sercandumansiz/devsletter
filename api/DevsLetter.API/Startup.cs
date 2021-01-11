@@ -79,6 +79,8 @@ namespace DevsLetter.API
 
             services.AddControllers();
             services.AddCors();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -89,9 +91,14 @@ namespace DevsLetter.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(
-                       options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials()
-                   );
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevsLetter API V1");
+            });
+
+            app.UseCors(options => options.SetIsOriginAllowed(x => _ = true).AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 
             app.UseHttpsRedirection();
 
