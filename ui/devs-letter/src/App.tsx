@@ -71,43 +71,47 @@ export default function App() {
   };
   return (
     <Provider options={globalOptions}>
-      <Router>
-        <Header />
-        <NavBar />
-        {isAuthenticated ? (
-          <Switch>
-            <Route path="/" exact={true} component={Landing} />
-            <Route
-              path="/showcase"
-              exact={true}
-              component={DevsLetterShowcase}
-            />
-            <Redirect from="/join" to="/showcase" />
-            <Redirect from="/login" to="/showcase" />
-            <Route
-              path="/become-a-producer"
-              exact={true}
-              component={ProducerSignUp}
-            />
-            {user && userResponse && userResponse.type != Role.Producer && (
-              <Route
-                path="/become-a-producer"
-                exact={true}
-                component={ProducerSignUp}
-              />
-            )}
-          </Switch>
-        ) : (
-          <Switch>
-            <Route path="/" exact={true} component={Landing} />
-            <Route path="/join" exact={true} component={SignUp} />
-            <Route from="/login" exact={true} component={Login} />
-            <Redirect from="/showcase" to="/login" />
-            <Redirect from="/become-a-producer" to="/login" />
-          </Switch>
-        )}
+       <div id="wrapper">
+          <Router>
+            {/* <Header /> */}
+            <NavBar />
+          
+
+            {isAuthenticated ? (
+              <Switch>
+                <Route path="/" exact={true} component={Landing} />
+                <Route
+                  path="/showcase"
+                  exact={true}
+                  component={DevsLetterShowcase}
+                />
+                <Redirect from="/join" to="/showcase" />
+                <Redirect from="/login" to="/showcase" />
+                <Route
+                  path="/become-a-producer"
+                  exact={true}
+                  component={ProducerSignUp}
+                />
+                {user && userResponse && userResponse.type != Role.Producer && (
+                  <Route
+                    path="/become-a-producer"
+                    exact={true}
+                    component={ProducerSignUp}
+                  />
+                )}
+              </Switch>
+            ) : (
+              <Switch>
+                <Route path="/" exact={true} component={Landing} />
+                <Route path="/join" exact={true} component={SignUp} />
+                <Route from="/login" exact={true} component={Login} />
+                <Redirect from="/showcase" to="/login" />
+                <Redirect from="/become-a-producer" to="/login" />
+              </Switch>
+                )}
+          </Router>
+        </div>
         <Footer />
-      </Router>
     </Provider>
   );
 }

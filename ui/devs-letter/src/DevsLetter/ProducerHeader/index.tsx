@@ -37,11 +37,12 @@ export default function DevsLetterProducerHeader() {
     if (hasLetter) {
       await put(`/letters/${letter!.id}/`, data);
       if (response.ok) {
-        setIsEditing(false);
+        setEditable(false);
       }
     } else {
       await post(`/users/${userResponse.id}/letter/publish`, data);
       if (response.ok) {
+        await getLetter();
       }
     }
   };
